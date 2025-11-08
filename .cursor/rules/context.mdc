@@ -15,3 +15,12 @@ We are building a voice agent AI app for the elderly to diagnose treatments, ask
 - Will send transcript as a pdf to the trusted contact
 - Memory agent will extract key parts of the transcript and store it in the database for future context
 - Can upload patient context like latest blood test report
+
+Multiple agents:
+
+- Risk assessment agent
+- Diagnosis agent
+- Doctor appointment booking agent
+- Medicine ordering agent
+- Memory agent
+- Transcript agent
