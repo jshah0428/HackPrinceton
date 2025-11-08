@@ -1,0 +1,15 @@
+[project]
+name = "doctorvoice-backend"
+version = "0.1.0"
+description = "Medical file analysis API using OpenAI"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "anthropic>=0.18.0",
+    "python-multipart>=0.0.6",
+    "pypdf2>=3.0.0",
+    "pillow>=10.2.0",
+    "pytesseract>=0.3.10",
+]
+

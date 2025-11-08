@@ -10,19 +10,45 @@ export default function Home() {
   const router = useRouter();
   const [showSymptoms, setShowSymptoms] = useState(false);
 
-  const handleUploadComplete = (files: File[]) => {
-    // Store just the file info (not the actual file data) to avoid quota issues
-    const filesInfo = files.map(f => ({
-      name: f.name,
-      size: f.size,
-      type: f.type
-    }));
-    
-    sessionStorage.setItem('uploadedFiles', JSON.stringify(filesInfo));
-    sessionStorage.setItem('uploadTime', new Date().toISOString());
-    
-    // Navigate to confirmation page
-    router.push('/confirmation');
+  const handleUploadComplete = async (files: File[]) => {
+    try {
+      // Store file info
+      const filesInfo = files.map(f => ({
+        name: f.name,
+        size: f.size,
+        type: f.type
+      }));
+      
+      sessionStorage.setItem('uploadedFiles', JSON.stringify(filesInfo));
+      sessionStorage.setItem('uploadTime', new Date().toISOString());
+      sessionStorage.setItem('analysisStatus', 'processing');
+      
+      // Send files to backend for analysis
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('files', file);
+      });
+
+      fetch('http://localhost:8000/analyze', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          sessionStorage.setItem('analysisResult', JSON.stringify(data));
+          sessionStorage.setItem('analysisStatus', 'complete');
+        })
+        .catch(error => {
+          console.error('Analysis error:', error);
+          sessionStorage.setItem('analysisStatus', 'error');
+        });
+      
+      // Navigate to confirmation page immediately
+      router.push('/confirmation');
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload files. Please try again.');
+    }
   };
 
   return (
