@@ -23,6 +23,7 @@ export async function GET(
     return NextResponse.json({
       id: patient.id,
       patient_name: patient.patientName,
+      phone_number: patient.phoneNumber,
       trusted_contact_email: patient.trustedContactEmail,
       created_at: patient.createdAt,
       updated_at: patient.updatedAt,

@@ -11,6 +11,7 @@ import { relations } from "drizzle-orm";
 export const patients = pgTable("patients", {
   id: uuid("id").defaultRandom().primaryKey(),
   patientName: varchar("patient_name", { length: 255 }).notNull(),
+  phoneNumber: varchar("phone_number", { length: 20 }).notNull().unique(),
   trustedContactEmail: varchar("trusted_contact_email", {
     length: 255,
   }).notNull(),

@@ -30,6 +30,13 @@ const patientFormSchema = z.object({
     .string()
     .min(1, "Patient name is required")
     .max(255, "Patient name must be less than 255 characters"),
+  phone_number: z
+    .string()
+    .min(1, "Phone number is required")
+    .regex(
+      /^\+?[1-9]\d{1,14}$/,
+      "Please enter a valid phone number (e.g., +1234567890)"
+    ),
   trusted_contact_email: z.string().email("Please enter a valid email address"),
 });
 
@@ -47,6 +54,7 @@ export function PatientForm() {
     resolver: zodResolver(patientFormSchema),
     defaultValues: {
       patient_name: "",
+      phone_number: "",
       trusted_contact_email: "",
     },
   });
@@ -75,6 +83,7 @@ export function PatientForm() {
       setSession({
         patientId: data.id,
         patientName: data.patient_name,
+        phoneNumber: data.phone_number,
         trustedContactEmail: data.trusted_contact_email,
       });
 
@@ -116,6 +125,27 @@ export function PatientForm() {
                   </FormControl>
                   <FormDescription>
                     The full name of the patient being registered.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone_number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="tel"
+                      placeholder="+1234567890"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Patient&apos;s phone number (used for voice call identification).
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

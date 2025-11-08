@@ -1,6 +1,7 @@
 export interface Session {
   patientId: string;
   patientName: string;
+  phoneNumber: string;
   trustedContactEmail: string;
 }
 

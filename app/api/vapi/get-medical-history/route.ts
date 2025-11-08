@@ -14,21 +14,24 @@ import type { Document } from "@llamaindex/core/schema";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const patientId = searchParams.get("patient_id");
+    const phoneNumber = searchParams.get("phone");
 
-    if (!patientId) {
+    if (!phoneNumber) {
       return NextResponse.json(
-        { error: "patient_id is required" },
+        { error: "phone_number is required" },
         { status: 400 }
       );
     }
 
-    // Verify patient exists
-    const [patient] = await db
-      .select()
-      .from(patients)
-      .where(eq(patients.id, patientId))
-      .limit(1);
+    let patient;
+    if (phoneNumber) {
+      // Find by patient ID
+      [patient] = await db
+        .select()
+        .from(patients)
+        .where(eq(patients.phoneNumber, phoneNumber))
+        .limit(1);
+    }
 
     if (!patient) {
       return NextResponse.json({ error: "Patient not found" }, { status: 404 });
@@ -38,12 +41,13 @@ export async function GET(request: NextRequest) {
     const history = await db
       .select()
       .from(medicalHistory)
-      .where(eq(medicalHistory.patientId, patientId))
+      .where(eq(medicalHistory.patientId, patient.id))
       .orderBy(medicalHistory.createdAt);
 
     return NextResponse.json({
-      patient_id: patientId,
+      patient_id: patient.id,
       patient_name: patient.patientName,
+      phone_number: patient.phoneNumber,
       medical_history: history.map((entry) => ({
         id: entry.id,
         content: entry.content,

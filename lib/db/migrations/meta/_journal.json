@@ -15,6 +15,13 @@
       "when": 1762613428322,
       "tag": "0001_stiff_microchip",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762615678398,
+      "tag": "0002_far_the_fury",
+      "breakpoints": true
     }
   ]
 }
