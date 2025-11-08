@@ -2,6 +2,15 @@
 alwaysApply: true
 ---
 
-- use uv for package management in /backend
-- use bun for package management in /frontend
-- install deps in /backend with uv add. dont use uv sync after putting deps in pyproject.toml
+- Use uv for package management in /backend
+- Use bun for package management in /frontend
+- Install deps in /backend with uv add. dont use uv sync after putting deps in pyproject.toml
+- Always use shadcn components and install via the script: `bunx shadcn@latest add <component>`
+- Use Image from next/image for all images.
+- Use Link from next/link for app links and <a> for external links.
+- Break down complex components into smaller components.
+- Use kebab-case naming convention for file names.
+- Use Lucide React for icons.
+- Use cn from @/lib/utils for all class name merging.
+- Never create markdown files (.md) after you are done. Never!
+- Never cast to any type. Always use correct types.
