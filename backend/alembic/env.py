@@ -23,8 +23,8 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Import your models here for autogenerate support
-from database import Base
-from models import User, Item
+from db.database import Base
+from db.models import Patient
 
 # add your model's MetaData object here
 # for 'autogenerate' support

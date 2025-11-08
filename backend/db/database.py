@@ -76,7 +76,7 @@ async def init_db():
     """
     async with engine.begin() as conn:
         # Import all models here to ensure they are registered
-        # from .models import User, Item, etc.
+        from db.models import Patient  # noqa: F401
         await conn.run_sync(Base.metadata.create_all)
 
 
@@ -86,3 +86,4 @@ async def close_db():
     Call this on application shutdown.
     """
     await engine.dispose()
+

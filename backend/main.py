@@ -5,8 +5,8 @@ from sqlalchemy import select
 from dotenv import load_dotenv
 import os
 
-from database import get_db, init_db, close_db
-from models import User, Item
+from db import get_db, init_db, close_db
+from routers import patients_router
 
 # Load environment variables
 load_dotenv()
@@ -31,6 +31,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(patients_router)
 
 
 @app.on_event("startup")
@@ -68,21 +71,6 @@ async def db_health_check(db: AsyncSession = Depends(get_db)):
     except Exception as e:
         return {"status": "unhealthy", "database": "disconnected", "error": str(e)}
 
-
-@app.get("/users")
-async def get_users(db: AsyncSession = Depends(get_db)):
-    """Example endpoint to get all users"""
-    result = await db.execute(select(User))
-    users = result.scalars().all()
-    return {"users": users}
-
-
-@app.get("/items")
-async def get_items(db: AsyncSession = Depends(get_db)):
-    """Example endpoint to get all items"""
-    result = await db.execute(select(Item))
-    items = result.scalars().all()
-    return {"items": items}
 
 if __name__ == "__main__":
     import uvicorn

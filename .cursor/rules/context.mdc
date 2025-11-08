@@ -1,3 +1,7 @@
+---
+alwaysApply: true
+---
+
 We are building a voice agent AI app for the elderly to diagnose treatments, ask questions, schedule appointments with real doctors, order medicines from nearby pharmacies.
 
 - Create profile of patient and add a trusted contact
