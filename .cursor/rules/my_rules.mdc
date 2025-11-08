@@ -1,3 +1,7 @@
 ---
 alwaysApply: true
 ---
+
+- use uv for package management in /backend
+- use bun for package management in /frontend
+- install deps in /backend with uv add. dont use uv sync after putting deps in pyproject.toml
