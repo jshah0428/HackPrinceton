@@ -12,5 +12,5 @@ alwaysApply: true
 - Use kebab-case naming convention for file names.
 - Use Lucide React for icons.
 - Use cn from @/lib/utils for all class name merging.
-- Never create markdown files (.md) after you are done. Never!
+- Never create markdown files (.md) after you are done explaining your changes. Never!
 - Never cast to any type. Always use correct types.

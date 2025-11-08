@@ -1,0 +1,13 @@
+We are building a voice agent AI app for the elderly to diagnose treatments, ask questions, schedule appointments with real doctors, order medicines from nearby pharmacies.
+
+- Create profile of patient and add a trusted contact
+- Voice based agent on the website + phone call integration
+- Describe symptoms
+- AI agent keeps questioning until its satisfied
+- Diagnoses results with trusted sources for its info and sees if you should see a doctor
+- Searches for doctors in the area and finds the best ones. Can book the doctors appointment directly
+- It will prescribe medicines and will find nearby pharmacies and find the best price
+- If approved it will place an order
+- Will send transcript as a pdf to the trusted contact
+- Memory agent will extract key parts of the transcript and store it in the database for future context
+- Can upload patient context like latest blood test report

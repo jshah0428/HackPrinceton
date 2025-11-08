@@ -9,4 +9,8 @@ dependencies = [
     "uvicorn[standard]>=0.32.0",
     "python-dotenv>=1.0.0",
     "python-multipart>=0.0.9",
+    "sqlalchemy>=2.0.44",
+    "asyncpg>=0.30.0",
+    "psycopg2-binary>=2.9.11",
+    "alembic>=1.17.1",
 ]
