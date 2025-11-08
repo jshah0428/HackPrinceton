@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { setSession } from "@/lib/session";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -36,6 +38,7 @@ const patientFormSchema = z.object({
 type PatientFormValues = z.infer<typeof patientFormSchema>;
 
 export function PatientForm() {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{
     type: "success" | "error";
@@ -69,11 +72,16 @@ export function PatientForm() {
       }
 
       const data = await response.json();
-      setSubmitMessage({
-        type: "success",
-        text: `Patient ${data.patient_name} registered successfully!`,
+      
+      // Store session in localStorage (mock auth for hackathon)
+      setSession({
+        patientId: data.id,
+        patientName: data.patient_name,
+        trustedContactEmail: data.trusted_contact_email,
       });
-      form.reset();
+      
+      // Redirect to dashboard
+      router.push("/dashboard");
     } catch (error) {
       setSubmitMessage({
         type: "error",
