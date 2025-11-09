@@ -205,22 +205,19 @@ export default function ConfirmationPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-12 flex gap-4">
+        <div className="mt-12 flex flex-col sm:flex-row gap-4">
           <Link
             href="/"
             className="flex-1 py-4 px-6 bg-white text-black rounded-xl font-bold text-center hover:shadow-xl hover:shadow-white/30 hover:scale-105 transition-all duration-200"
           >
             Upload More Files
           </Link>
-          <button
-            className="flex-1 py-4 px-6 bg-gray-900 border border-gray-700 text-white rounded-xl font-bold hover:bg-gray-800 hover:border-white transition-all duration-200"
-            onClick={() => {
-              // Placeholder for viewing results
-              alert('Results will be available once processing is complete!');
-            }}
+          <Link
+            href="/records"
+            className="flex-1 py-4 px-6 bg-gray-900 border border-gray-700 text-white rounded-xl font-bold text-center hover:bg-gray-800 hover:border-white transition-all duration-200"
           >
-            View Results
-          </button>
+            View All Records
+          </Link>
         </div>
 
         {/* AI Analysis Results */}

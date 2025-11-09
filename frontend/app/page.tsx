@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import FileUploader from '@/components/FileUploader';
 import SymptomsDisplay from '@/components/SymptomsDisplay';
 import Image from 'next/image';
+import { saveMedicalRecord, updateMedicalRecordAnalysis } from '@/lib/records';
+import Link from 'next/link';
 
 export default function Home() {
   const router = useRouter();
@@ -19,32 +21,77 @@ export default function Home() {
         type: f.type
       }));
       
+      const uploadTime = new Date().toISOString();
+      
+      // Save to sessionStorage for confirmation page
       sessionStorage.setItem('uploadedFiles', JSON.stringify(filesInfo));
-      sessionStorage.setItem('uploadTime', new Date().toISOString());
+      sessionStorage.setItem('uploadTime', uploadTime);
       sessionStorage.setItem('analysisStatus', 'processing');
       
-      // Send files to backend for analysis
-      const formData = new FormData();
-      files.forEach((file) => {
-        formData.append('files', file);
+      // Save to localStorage for records page
+      const record = saveMedicalRecord({
+        uploadDate: uploadTime,
+        files: filesInfo,
       });
-
-      fetch('http://localhost:8000/analyze', {
-        method: 'POST',
-        body: formData,
-      })
-        .then(response => response.json())
+      
+            // Send files to backend for analysis with record ID
+            const formData = new FormData();
+            files.forEach((file) => {
+              formData.append('files', file);
+            });
+        
+            fetch(`http://localhost:8000/analyze?record_id=${record.id}`, {
+              method: 'POST',
+              body: formData,
+            })
+        .then(async response => {
+          if (!response.ok) {
+            // Try to parse JSON error, but handle if it's not JSON
+            let errorMessage = `Server error: ${response.status}`;
+            try {
+              const errorData = await response.json();
+              errorMessage = errorData.detail || errorData.message || errorMessage;
+            } catch (e) {
+              // If not JSON, try to get text
+              try {
+                const errorText = await response.text();
+                errorMessage = errorText || errorMessage;
+              } catch (textError) {
+                // Use default message
+              }
+            }
+            throw new Error(errorMessage);
+          }
+          return response.json();
+        })
         .then(data => {
+          console.log('Analysis complete:', data);
           sessionStorage.setItem('analysisResult', JSON.stringify(data));
           sessionStorage.setItem('analysisStatus', 'complete');
+          
+          // Update the record with analysis results
+          updateMedicalRecordAnalysis(record.id, {
+            success: data.success,
+            analysis: data.analysis,
+            files_processed: data.files_processed,
+            extracted_text_length: data.extracted_text_length,
+            total_size_mb: data.total_size_mb,
+            analysis_length: data.analysis_length,
+          });
         })
         .catch(error => {
           console.error('Analysis error:', error);
           sessionStorage.setItem('analysisStatus', 'error');
+          
+          // Update record with error
+          updateMedicalRecordAnalysis(record.id, {
+            success: false,
+            analysis: `Error: ${error.message}`,
+          });
         });
       
-      // Navigate to confirmation page immediately
-      router.push('/confirmation');
+      // Navigate to records page with the new record ID
+      router.push(`/records?recordId=${record.id}`);
     } catch (error) {
       console.error('Upload error:', error);
       alert('Failed to upload files. Please try again.');
@@ -87,8 +134,13 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="text-sm text-gray-400 whitespace-nowrap">
-              AI-Powered Medical Analysis
+            <div className="flex items-center gap-3">
+              <Link 
+                href="/records"
+                className="text-sm text-gray-400 hover:text-white whitespace-nowrap transition-colors"
+              >
+                View Medical Records →
+              </Link>
             </div>
           </div>
         </div>
